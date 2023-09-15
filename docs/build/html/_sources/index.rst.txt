@@ -10,9 +10,9 @@ sphinx私房手册
    :maxdepth: 2
    :caption: 内容目录:
 
-   tutorial
+   tutorials/cross_reference
 
-
+.. _index and table:
 
 索引和表
 ==================

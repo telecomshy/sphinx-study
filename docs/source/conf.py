@@ -17,7 +17,12 @@ release = '0.1.0'
 extensions = []
 
 templates_path = ['_templates']
-exclude_patterns = []
+exclude_patterns = [
+    'sphinx.ext.autodoc',
+    'sphinx.ext.autosummary',
+    'sphinx.ext.intersphinx',
+    'sphinx_rtd_theme'
+]
 
 language = 'zh_CN'
 
