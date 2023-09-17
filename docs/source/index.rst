@@ -6,17 +6,24 @@
 sphinx私房手册
 ========================================
 
+这个教程是我学习sphinx的一些笔记，主要记录学习的一些心得，主要分为两部分，一部分是记录官网教程中没有提到的一些细节，比如
+另外，sphinx是基于reStructuredText，reStructuredText不太易学更难精，所以另一部分是通过一些例子，记录reStructuredText中易错
+或者难以理解的一些概念。
+
+sphinx
+------------------------
+
 .. toctree::
    :maxdepth: 2
-   :caption: 内容目录:
 
-   tutorials/cross_reference
+   tutorials/sphinx/quickstart
 
-.. _index and table:
+reStructuredText
+------------------------
 
-索引和表
-==================
+.. toctree::
+   :maxdepth: 2
 
-* :ref:`genindex`
-* :ref:`modindex`
-* :ref:`search`
+   tutorials/restructuredtext/primer
+   tutorials/restructuredtext/cross_reference
+
