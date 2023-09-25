@@ -1,29 +1,26 @@
 reStructuredText私房手册
 ==========================
 
-块和列表
+`reStructuredText标记规范`_ 部分主要是基于docutils官方文档 `reStructuredText Markup Specification <https://docutils.sourceforge.io/docs/ref/rst/restructuredtext.html>`_
+，对一些不好理解的例子加以详细说明。
+
+`交叉引用`_ 是reStructuredText非常常用，且最大的特点之一，同时也是不太好理解一块内容。这部分主要基于readthedocs的教程 `cross referencing with sphinx <https://docs.readthedocs.io/en/stable/guides/cross-referencing-with-sphinx.html#explicit-targets>`_
+并且添加了一些自己的理解。
+
+reStructuredText标记规范
++++++++++++++++++++++++++
+
+文档元素(Body Elements)
 -------------------------
 
-- 参考链接：`reStructuredText basics <https://www.osgeo.cn/sphinx/usage/restructuredtext/basics.html#rst-field-lists>`_
+除了常见的无序有序列表，还有以下几个列表或者块：
 
-除了普通的块和列表，有几个特殊的块不太好理解：
+定义列表(Explicit Markup Blocks)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-定义列表 (`Definition Lists <https://docutils.sourceforge.io/docs/ref/rst/restructuredtext.html#definition-lists>`_)
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+这个定义不是动词是名称。比如下面的例子，``term`` 是一个名词，指对术语的解释：
 
-    这个定义不是动词是名称。比如下面的例子，`term` 是一个名词，`Definition of the term, which must be indented` 是对它的解释：
-
-    .. code-block:: rst
-
-        term (up to a line of text)
-            Definition of the term, which must be indented
-
-            and can even consist of multiple paragraphs
-
-        next term
-            Description.
-
-    渲染出来是这样：
+.. code-block:: rst
 
     term (up to a line of text)
         Definition of the term, which must be indented
@@ -33,22 +30,24 @@ reStructuredText私房手册
     next term
         Description.
 
-    注意，名词和它的解释之间没有空行。
+渲染出来是这样：
 
-引用块 (`Block Quotes <https://docutils.sourceforge.io/docs/ref/rst/restructuredtext.html#block-quotes>`_)
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+term (up to a line of text)
+    Definition of the term, which must be indented
 
-    引用块顾名思义，就是引用别人的话，格式和定义列表很像，区别就是第一行和第二行之间有空行：
+    and can even consist of multiple paragraphs
 
-    .. code-block:: rst
+next term
+    Description.
 
-        This is an ordinary paragraph, introducing a block quote.
+注意，名词和它的解释之间没有空行。
 
-            "It is my business to know things.  That is my trade."
+引用块(Block Quotes)
+~~~~~~~~~~~~~~~~~~~~~
 
-            -- Sherlock Holmes
+引用块顾名思义，就是引用别人的话，格式和定义列表很像，区别就是第一行和第二行之间有空行：
 
-    渲染结果是：
+.. code-block:: rst
 
     This is an ordinary paragraph, introducing a block quote.
 
@@ -56,39 +55,258 @@ reStructuredText私房手册
 
         -- Sherlock Holmes
 
-文字块 (`Literal Blocks <https://docutils.sourceforge.io/docs/ref/rst/restructuredtext.html#literal-blocks>`_)
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+渲染结果是：
 
-    所谓文字块，就是对任何标记不进行渲染，文字内容写出来是什么样，展示出来就怎么样。文字块和引用块很类似，区别是文字块后面是两个冒号。
+This is an ordinary paragraph, introducing a block quote.
 
-    .. code-block:: rst
+    "It is my business to know things.  That is my trade."
 
-        This is a normal text paragraph. The next paragraph is a code sample::
+    -- Sherlock Holmes
 
-           It is not processed in any way, except
-           that the indentation is removed.
+文字块(Literal Blocks)
+~~~~~~~~~~~~~~~~~~~~~~~
 
-           It can span multiple lines.
+所谓文字块，就是对任何标记不进行渲染，文字内容写出来是什么样，展示出来就怎么样。文字块和引用块很类似，区别是文字块后面是两个冒号。
 
-        This is a normal text paragraph again.
-
-    渲染的结果是：
+.. code-block:: rst
 
     This is a normal text paragraph. The next paragraph is a code sample::
 
-        It is not processed in any way, except
-        that the indentation is removed.
+       It is not processed in any way, except
+       that the indentation is removed.
 
-        It can span multiple lines.
+       It can span multiple lines.
 
     This is a normal text paragraph again.
 
+渲染的结果是：
 
+This is a normal text paragraph. The next paragraph is a code sample::
+
+    It is not processed in any way, except
+    that the indentation is removed.
+
+    It can span multiple lines.
+
+This is a normal text paragraph again.
+
+文字块后面是两个冒号，双冒号很智能，它的规则是:
+
+1. 如果两个冒号单独一行，则渲染以后这一行不会显示。
+2. 如果两个冒号前有空格，则最后渲染出来的结果不包含这两个冒号。
+3. 如果两个冒号前是非空格，则最后渲染的结果只包含一个冒号。
+
+字段列表(Field Lists)
+~~~~~~~~~~~~~~~~~~~~~~
+
+源码：
+
+.. code-block:: rst
+
+    :what: Field lists map field names to field bodies, like
+       database records.  They are often part of an extension
+       syntax.
+
+    :how: The field marker is a colon, the field name, and a
+          colon.
+
+          The field body may contain one or more body elements,
+          indented relative to the field marker.
+
+渲染以后：
+
+:what: Field lists map field names to field bodies, like
+       database records.  They are often part of an extension
+       syntax.
+
+:how: The field marker is a colon, the field name, and a
+      colon.
+
+      The field body may contain one or more body elements,
+      indented relative to the field marker.
+
+选项列表(Field Lists)
+~~~~~~~~~~~~~~~~~~~~~~
+
+源码：
+
+.. code-block:: rst
+
+    -a            command-line option "a"
+    -b file       options can have arguments
+                  and long descriptions
+    --long        options can be long also
+    --input=file  long options can also have
+                  arguments
+    /V            DOS/VMS-style options too
+
+渲染以后：
+
+-a            command-line option "a"
+-b file       options can have arguments
+              and long descriptions
+--long        options can be long also
+--input=file  long options can also have
+              arguments
+/V            DOS/VMS-style options too
+
+.. attention::
+
+    选项和描述之间最少2个空格
+
+显式标记块(Explicit Markup Blocks)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+显式标记块是reStructuredText不太好理解的一个概念。简单来说，任何最前面是 ``..`` 开头的块都是显式标记块，表示整个块需要用特殊方式进行解读。
+
+脚注(Footnotes)
+************************
+
+脚注可以认为是 `交叉引用`_ 的一种，语法如下：
+
+.. code-block:: rst
+
+    .. [1] A footnote contains body elements, consistently
+    indented by at least 3 spaces.
+
+渲染以后：
+
+.. [1] A footnote contains body elements, consistently
+    indented by at least 3 spaces.
+
+引用到脚注很简单, 写法是 ``脚注1 [1]_``，渲染以后就是脚注1 [1]_ 。
+
+脚注可以自动编号，使用 ``#`` 开头即可：
+
+.. code-block:: rst
+
+    .. [#] A footnote contains body elements, consistently
+        indented by at least 3 spaces.
+
+渲染以后：
+
+.. [#] A footnote contains body elements, consistently
+    indented by at least 3 spaces.
+
+脚注引用的写法为 ``脚注 [#]_``, 渲染以后就是 脚注 [#]_ 。``#`` 还可以跟文字说明。
+
+.. code-block:: rst
+
+    .. [#foot] A footnote contains body elements, consistently
+        indented by at least 3 spaces.
+
+文字只起个说明的作用，渲染出来还是数字编号：
+
+.. [#foot] A footnote contains body elements, consistently
+    indented by at least 3 spaces.
+
+另外，使用 ``*`` 号可以自动生成不同的符号，如下：
+
+.. code-block:: rst
+
+    .. [*] This is the star one footnote.
+    .. [*] This is the star two footnote.
+
+渲染以后：
+
+.. [*] This is the star one footnote.
+.. [*] This is the star two footnote.
+
+引用的时候统统使用 ``*`` 引用就可以了，比如：
+
+    - 源码：``星星脚注1 [*]_``，渲染结果：星星脚注1 [*]_
+    - 源码：``星星脚注2 [*]_``，渲染结果：星星脚注2 [*]_
+
+不过注意，``*`` 号后面不能跟文字说明。另外，几种脚注可以混用，但是最好选用一种，免得混淆。
+
+引用(Citations)
+************************
+
+引用和脚注很像，只不过使用文字而不是数字，比如：
+
+.. code-block:: rst
+
+    .. [CIT2002] This is the citation.  It's just like a footnote,
+        except the label is textual.
+
+渲染以后：
+
+.. [CIT2002] This is the citation.  It's just like a footnote,
+   except the label is textual.
+
+引用的写法：``[CIT2002]_``，渲染结果：[CIT2002]_
+
+超链接目标(Hyperlink Targets)
+******************************
+
+具体使用方法参考 `显式target`_
+
+替换定义(Substitution Definitions)
+***********************************
+
+顾名思义，如果有一个对象（文本，图像等）在多个位置被引用，就可以用替换进行简化。比如：
+
+.. code-block:: rst
+
+    |dog|
+
+    .. |dog| image:: dog.jpg
+
+渲染以后：
+
+    |dog|
+
+    .. |dog| image:: dog.jpg
+
+可见，图片替换了 ``|dog|``，其中 ``image::`` 是一个指令，关于指令请查看 `相应章节 <指令(Directives)>`_ 。
+
+sphinx内置了三个替换定义，分别是 ``|release|``, ``|version|``, ``|today|``,它会根据sphinx的配置文件自动进行替换。
+
+另外，在测试过程中，发现部分docutils的例子使用sphinx编译时报错，原因未知，留待以后补充。
+
+注释(Comments)
+******************
+
+段落前面加两个冒号及空格，这个段落就成了注释，注释是说明性的文字，不会进行渲染：
+
+.. code-block:: rst
+
+    .. This is a comment
+
+指令(Directives)
+******************
+
+指令是reStructuredText最强大的功能之一，也是最不好理解和掌握的特性。指令可以理解成通用的显式标记块，也就是说，上面所有的显式标记块，
+什么注释啊，脚注啊，都是一种特殊的指令而已。
+
+我们先看一个完整的指令是什么样子：
+
+.. code-block:: rst
+
+    .. function:: foo(x)
+                  foo(y, z)
+       :module: some.module.name
+
+       Return a line of text input from the user.
+
+渲染以后结果是这样：
+
+.. function:: foo(x)
+              foo(y, z)
+   :module: some.module.name
+
+   Return a line of text input from the user.
+
+内联标记(Inline Markup)
+------------------------
+
+在一段文本中，可能部分文字需要进行特殊的解读。这部分需要特殊解读的文字就被成为内联标记。
+
+专题内容
+++++++++++++++++++++++
 
 交叉引用
----------------------
-
-- 参考链接：`cross referencing with sphinx <https://docs.readthedocs.io/en/stable/guides/cross-referencing-with-sphinx.html#explicit-targets>`_
+----------------------
 
 所谓交叉引用 `cross reference` 就是一个链接。reStructuredText不仅可以链接一个URL，还可以链接到任意文档的任意位置，
 甚至可以链接到其它项目的文档，功能非常强大。但不是很容易掌握。
