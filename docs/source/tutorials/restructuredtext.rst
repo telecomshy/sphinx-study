@@ -264,15 +264,6 @@ sphinx内置了三个替换定义，分别是 ``|release|``, ``|version|``, ``|t
 
 另外，在测试过程中，发现部分docutils的例子使用sphinx编译时报错，原因未知，留待以后补充。
 
-注释(Comments)
-******************
-
-段落前面加两个冒号及空格，这个段落就成了注释，注释是说明性的文字，不会进行渲染：
-
-.. code-block:: rst
-
-    .. This is a comment
-
 指令(Directives)
 ******************
 
@@ -289,13 +280,76 @@ sphinx内置了三个替换定义，分别是 ``|release|``, ``|version|``, ``|t
 
        Return a line of text input from the user.
 
-渲染以后结果是这样：
+上面这个指令，``function`` 被称为指令名称，``foo(x)`` 和 ``foo(y, z)`` 可认为是指令的参数，``:module`` 被称为指令的选项。
+最后 ``Return ...`` 部分是指令的内容。
+
+不同的指令，有完全不同的解读方式。比如上面这个指令，渲染出来是下面这个样子：
 
 .. function:: foo(x)
               foo(y, z)
    :module: some.module.name
 
    Return a line of text input from the user.
+
+reStructuredText支持的指令很多，原生的指令可以查看
+`reStructuredText Directives <https://docutils.sourceforge.io/docs/ref/rst/directives.html>`_,
+另外，sphinx对原生的reStructuredText进行了扩展，添加了不少指令，查看
+`Directives <https://www.sphinx-doc.org/en/master/usage/restructuredtext/directives.html>`_ 。
+
+这里不对指令展开，免得分散注意力。常用的指令可以查看专题内容的 `常用指令`_ 部分。
+
+注释(Comments)
+******************
+
+段落前面加两个冒号及空格，这个段落就成了注释，注释是说明性的文字，不会进行渲染：
+
+.. code-block:: rst
+
+    .. This is a comment
+
+问题是，指令前面也是两个冒号开头，比如注释内容为 ``[comment] this is a comment!``, 此时sphinx会将其识别为前面提到过的
+引用，解决方法很简单，两个点一行，注释内容单独一行就可以了，如下:
+
+.. code-block:: rst
+
+    ..
+      [commnet] this is a comment!
+
+另外，单独两个冒号被称为空注释。空注释用于一个比较微妙的场景，比如下面的定义列表：
+
+.. code-block:: rst
+
+    This is
+        a definition list.
+
+        This is a block quote.
+
+``This is a block quote`` 本意是前面有缩进的新的段落。但是上面的写法，渲染出来的结果，却成了定义列表的一部分：
+
+This is
+    a definition list.
+
+    This is a block quote.
+
+此时，在定义列表后可以添加一个空注释，表示定义列表的终结：
+
+.. code-block:: rst
+
+    This is
+        a definition list.
+
+    ..
+
+        This is a block quote.
+
+此时，``This is a block quote`` 就不再是定义列表的一部分，而是一个单独的引用块（前面有缩进的新段落）：
+
+This is
+    a definition list.
+
+..
+
+    This is a block quote.
 
 内联标记(Inline Markup)
 ------------------------
@@ -346,3 +400,6 @@ sphinx内置了三个替换定义，分别是 ``|release|``, ``|version|``, ``|t
 
 渲染结果为：链接到根目录的 `index.rst` 文件 :doc:`/index` ，可见，渲染出来的文字内容是目标文件的第一个标题。当然也可以用前面的方法，自定义
 渲染内容。
+
+常用指令
+----------------------
