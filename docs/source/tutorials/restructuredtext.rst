@@ -4,8 +4,10 @@ reStructuredText私房手册
 `标记规范`_ 部分主要是基于docutils官方文档 `reStructuredText Markup Specification <https://docutils.sourceforge.io/docs/ref/rst/restructuredtext.html>`_
 ，对一些不好理解的例子加以详细说明。
 
-`交叉引用`_ 是reStructuredText非常常用，且最大的特点之一，同时也是不太好理解一块内容。这部分主要基于readthedocs的教程 `cross referencing with sphinx <https://docs.readthedocs.io/en/stable/guides/cross-referencing-with-sphinx.html#explicit-targets>`_
-并且添加了一些自己的理解。
+`重点专题`_ 是在标记规范里不好展开，或者某一个特定主题的内容。其中 `交叉引用`_ 是reStructuredText非常常用，且最强大的功能之一，
+但不是很好理解。因此单独成章放在重点专题里，这一章主要基于readthedocs的教程
+`cross referencing with sphinx <https://docs.readthedocs.io/en/stable/guides/cross-referencing-with-sphinx.html#explicit-targets>`_
+并且添加了自己的理解。
 
 -----------------------------------
 
