@@ -22,6 +22,7 @@ extensions = [
     'sphinx_rtd_theme',
 ]
 
+intersphinx_mapping = {'python': ('https://docs.python.org/3.11', None)}
 autosectionlabel_prefix_document = True
 
 templates_path = ['_templates']
@@ -45,3 +46,12 @@ html_sidebars = {
         "searchbox.html",
     ],
 }
+
+# 自定义全局的py角色
+rst_prolog = """
+.. role:: py(code)
+   :language: python
+"""
+
+# 设置默认的role角色
+default_role = "any"
