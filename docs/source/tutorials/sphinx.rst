@@ -61,9 +61,7 @@ default_role
 
     default_role = "any"
 
-`any <https://www.sphinx-doc.org/en/master/usage/restructuredtext/roles.html#role-any>`_ 是一个角色，它比较适合
-被设置成默认角色。它会自动搜索不同类型交叉引用的target，包括intersphinx插件创建的各种外部target。相当于可以省略 ``:term:``,
-``py:mod:``, ``:ref:``, ``:doc:`` 等等角色前缀。
+:ref:`tutorials/restructuredtext:any` 是一个角色，它比较适合被设置成默认角色。
 
 --------------------------------------------
 
@@ -83,3 +81,6 @@ napoleon是一个预处理器，它可以把google或者numpy风格的docstrings
 - `numpy风格的例子 <https://www.sphinx-doc.org/en/master/usage/extensions/example_numpy.html#example-numpy>`_
 
 如果使用pycharm，可以在设置->工具->python集成工具->docstrings中，选择自动生成相应的风格。
+
+sphinx.ext.intersphinx
+~~~~~~~~~~~~~~~~~~~~~~~~~~

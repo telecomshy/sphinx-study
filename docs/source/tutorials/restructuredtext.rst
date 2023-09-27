@@ -49,9 +49,14 @@ reStructuredText语法乍一看有点复杂，但是细分下来，其实主要�
 常见的无序有序列表，段落什么的就不列举了，很好理解。除了这些，reStructuredText还有以下几种列表或者块：
 
 章节(Sections)
-~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~
 
 reStructuredText中的章节可以对应markdown里的标题，它的语法很简单，但是功能作用比看上去要大的多。
+
+文字下面使用 ``=``, ``-``, ``~``, ``*``, ...等作为下划线的就是章节，相同的下划线对应相同的层级。从上到下
+读取，先读取到的层级高。
+
+另外，章节的标题天生就是 `隐式target`_ ，也就是说可以作为 `交叉引用`_ 的目标位置。
 
 定义列表(Explicit Markup Blocks)
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -277,7 +282,7 @@ This is a normal text paragraph again.
 超链接目标(Hyperlink Targets)
 ******************************
 
-具体使用方法参考 `显式target`_
+参考专题 `显式target`_
 
 替换定义(Substitution Definitions)
 ***********************************
@@ -389,6 +394,11 @@ This is
 
     This is a block quote.
 
+分割线(Transitions)
+~~~~~~~~~~~~~~~~~~~~~~~~
+
+reStructuredText的分隔线很简单，``--------`` 前后加空白行即可。
+
 内联标记(Inline Markup)
 ------------------------
 
@@ -398,7 +408,7 @@ This is
 
 - 斜体： ``*``
 - 粗体： ``**``
-- 解释性文本： `````, 反引号，解释性文本和角色有关，具体查看 `角色(Role)`_ 章节。
+- 解释性文本： `````, 反引号，解释性文本和角色息息相关，具体查看 `角色(Role)和域(Domain)`_ 章节。
 - 内联纯文本： ``````
 - 替换引用： ``|``
 
@@ -415,7 +425,7 @@ This is
 
 内联标记的识别规则基本上符合直觉，也就是说一般情况下不会写错。但是有几点需要注意：
 
-1. 内联标记的起始字符前，结束字符后需要是空格或者特定的ASCII字符。方便起见，都用空格吧。
+1. 内联标记的起始 ````` 前，结束 ````` 后需要是空格或者特定的ASCII字符。方便起见，都用空格吧。
 2. 如果有字符要紧接着内联标记，需要使用 ``\`` 进行转义，比如：
 
     .. code-block:: rst
@@ -430,11 +440,12 @@ This is
 
     Python ``list``\s use square bracket syntax.
 
-角色(Role)
-~~~~~~~~~~~~~~~
+角色(Role)和域(Domain)
+~~~~~~~~~~~~~~~~~~~~~~~~
 
 - `docutils角色文档 <https://docutils.sourceforge.io/docs/ref/rst/roles.html>`_
 - `sphinx角色文档 <https://www.sphinx-doc.org/en/master/usage/restructuredtext/roles.html>`_
+- `sphinx Domains <https://www.sphinx-doc.org/en/master/usage/restructuredtext/domains.html>`_
 
 上面提到了前后用反引号包括起来的文本叫可解释文本，所谓可解释文本，意思是需要用特定的方式去解读。那么，具体咋个解读呢？
 这就需要在前面或者后面添加一个角色标记。不同的角色，意味着不同的解读方式。比如：``:strong:`bold```，渲染出来就是 :strong:`bold` 。
@@ -445,7 +456,54 @@ This is
 sphinx官方文档说，默认角色不会对文本进行任何额外的处理，不过我使用的sphinx_rtd_theme主题，渲染以后都成了斜体，不
 知道是主题的原因还是默认就是这样。
 
-可以在conf配置文件中自定义默认的角色，参考配置 :ref:`tutorials/sphinx:default_role` 。
+可以在conf配置文件中通过 ``default_role`` 自定义默认的角色，参考配置 :ref:`tutorials/sphinx:default_role` 。
+
+说到角色，还有个域(Domain)概念也需要了解。域名是sphinx的扩展，原生的reStructuredText是没有的。它是在角色和
+指令前面再加一个标记，用以区分不同的语言。
+
+比如说，下面这个python函数：
+
+.. code-block:: rst
+
+    .. py:function:: pyfunc(x)
+
+       :param int x: an int
+       :returns: double x
+
+渲染出来是这样：
+
+.. py:function:: pyfunc(x)
+
+   :param int x: an int
+   :returns: double x
+
+:rst:`:py:` 就是指令的域，表示这是一个python函数（可以省略，默认就是python）。但如果现在是一个javascript的函数呢？
+此时，可以在之前前面加上 :rst:`:js:` 域，表示使用的语言是javascript，比如：
+
+.. code-block:: rst
+
+    .. js:function:: jsfunc(x)
+
+       :param int x: an int
+       :returns: double x
+
+.. js:function:: jsfunc(x)
+
+   :param int x: an int
+   :returns: double x
+
+不光指令有域，角色也有域，基本上，和域相关的指令和角色是成对的。比如，:rst:`:py:meth:\`os.getcwd\``, 域+角色就链接
+到了python的官方文档，渲染以后结果是： :py:func:`os.getcwd` 。
+
+.. attention::
+
+    指令域前面不用加冒号，角色域前面要加冒号
+
+.. note::
+
+    如何链接到其它项目的文档，参考 :ref:`tutorials/sphinx:sphinx.ext.intersphinx`
+
+为了不分散注意力，这里仅介绍概念，具体角色请参考 `常用角色`_ 章节。
 
 -----------------------------------
 
@@ -497,6 +555,9 @@ sphinx官方文档说，默认角色不会对文本进行任何额外的处理�
 
 可见，渲染出来的文字内容是目标文件的第一个标题。当然也可以用前面的方法，自定义渲染内容。
 
+隐式target
+~~~~~~~~~~~~~~~~~~~~~
+
 常用指令
 ----------------------
 
@@ -516,7 +577,7 @@ toctree是一个sphinx的扩展指令，可以说它是sphinx最重要的一个�
 code
 ~~~~~~~~~~~~~~
 
-正常情况下，``code`` 角色渲染出来的结果和内联纯文本是一样的。但是 ``code`` 可以搭配 ``role`` 指令使用。比如，我希望内联高亮python
+正常情况下，``code`` 角色渲染出来的结果和内联纯文本是一样的。``code`` 一般是搭配 ``role`` 指令使用。比如，我希望内联高亮python
 语句，则先定义一个 ``role``:
 
 .. code-block:: rst
@@ -527,5 +588,16 @@ code
 接下来就可以使用 ``py`` 这个角色了, 比如： ``:py:`lambda x: x * x``` ， 渲染出来就是 :py:`lambda x: x * x` 。注意，指令定义
 必须在使用角色之前，否则会报错。
 
-如果不想每个rst文件这么定义一遍，而是定义一个全局的角色，可以配置conf文件的 :ref:`rst_prolog <tutorials/sphinx:rst_prolog>` 条目。
+如果不想每个rst文件这么定义一遍，而是定义一个全局的角色，可以配置conf文件的 :ref:`rst_prolog <tutorials/sphinx:rst_prolog>` 选项。
+
+any
+~~~~~~~~~~~~~
+
+``any`` 是sphinx扩展角色，它相当于是一个交叉引用的搜索引擎，会自动搜索所有的target。设置了 ``any``, 相当于可以省略 ``:term:``,
+``py:mod:``, ``:ref:``, ``:doc:`` 等等角色前缀。
+
+``any`` 一般被当作默认的角色，设置默认角色参考 :ref:`rst_prolog <tutorials/sphinx:rst_prolog>` 配置。
+
+比如，当前项目已经设置了使用 ``any`` 为默认角色，则要链接到python官方文档 *os* 包的 *getcwd* 函数，则可以直接写成 :rst:`\`os.getcwd\``,
+不需要加前缀写成 :rst:`:py:func:\`os.getcwd\`` ，渲染以后就是 `os.getcwd` 。
 

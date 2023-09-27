@@ -50,7 +50,10 @@ html_sidebars = {
 # 自定义全局的py角色
 rst_prolog = """
 .. role:: py(code)
-   :language: python
+    :language: python
+   
+.. role:: rst(code)
+    :language: rst
 """
 
 # 设置默认的role角色
