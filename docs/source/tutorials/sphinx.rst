@@ -84,3 +84,7 @@ napoleon是一个预处理器，它可以把google或者numpy风格的docstrings
 
 sphinx.ext.intersphinx
 ~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+sphinx.ext.autosectionlabel
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

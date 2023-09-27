@@ -513,33 +513,104 @@ sphinx官方文档说，默认角色不会对文本进行任何额外的处理�
 交叉引用
 ----------------------
 
-所谓交叉引用(cross reference)就是一个链接。reStructuredText不仅可以链接一个URL，还可以链接到任意文档的任意位置，
-甚至可以链接到其它项目的文档，功能非常强大。但不是很容易掌握。
+所谓交叉引用，就是链接。首先学习一个术语，在sphinx中，所有交叉引用都是由reference和target构成的，两者是成对的，我们点击reference，
+就会跳转到target定义的位置。sphinx中，有两种不同的reference，一种是反引号后面加一个下划线。
+
+.. code-block:: rst
+
+    Python website is: `http://www.python.org/`_
+
+另外一种是使用 ``:ref:`` 角色。 比如： :rst:`:ref:\`api\`` 这样的一个写法，其中，反引号包含的文本被称为可解释文本，
+表示要用特殊的方法去解读，前面的 ``:ref:`` 是解读的方法，表示后面反引号包含的内容是一个引用。这个 ``:ref:`` 就被称为角色。
+
+target分为三种，分别是：外部url，显式target，隐式target。
+
+sphinx的交叉引用非常强大，只要定义好了reference和target，不仅可以在同一个文档中，还可以在不同文档中跳转。
+甚至利用intersphinx插件，还可以跳转到其它开源项目文档中的target。要注意的是，反引号的方式，只能跳转到同一个文档的target，
+如果要跳转到其它文档的target，只能使用ref角色。
+
+接下来，我们基于不同的target，学习如何使用sphinx的交叉引用。
+
+.. _outside url:
 
 外部URL
 ~~~~~~~~~~~~~~~~~~~~
 
-如果要链接到外部的url，以下两种写法是一样的：
+外部url很简单，直接写url就好了：
 
 .. code-block:: rst
 
-    Python website is: `<http://www.python.org/>`_
     Python website is: http://www.python.org/
 
-渲染结果均为：Python website is `<http://www.python.org/>`_ 。如果不想直接显示URL，想以文字代替，则可以：
+渲染出来结果是： Python website is: http://www.python.org/
+
+如果你想显示文本内容而不是直接的链接，就好像markdown的 ``[python](http://www.python.org)`` ，你可以这样写：
 
 .. code-block:: rst
 
     Python website is: `python <http://www.python.org/>`_
 
-渲染结果为：Python website is `python <http://www.python.org/>`_
+渲染出来是这样：Python website is: `python <http://www.python.org/>`_ ， ````` 是反引号， 两个反引号囊括起来的文本，
+在reStructuredText中，被称为解释性文本。表示整个文本，需要使用特定的方式去解读，后面加一个 ``_``，则表示这个文本是一个链接。
 
 显式target
 ~~~~~~~~~~~~~~~~~~~~
 
 我们还可以把引用(reference)和目标地址(target)分开。比如，在文档中这样写：
 
+.. code-block:: rst
+
+    Python website is: `python`_
+
+如果是单个单词，可以直接写成：
+
+.. code-block:: rst
+
+    Python website is: python_
+
+这里的 ``python_`` 被称为target标签（reference），它是指向文档其它部分的指针。然后，我们可以在文档的其它任何地方，添加一个
+target标签，写法是：
+
+.. code-block:: rst
+
+    .. _python: http://www.python.org/
+
+如果我们不是跳转到外部url，而是在文档内部或者文档之间跳转。则冒号后面可以不加任何内容，:rst:`.. _python:` 。此时表示一个
+target标签。
+
+注意，如果冒号后面没有内容，则target标签后面不能接普通的段落，必须接章节，定义段落，脚注，代码块，定义列表这些可以用来定位的元素，
+就像这样：
+
+.. code-block:: rst
+
+    .. _outside url:
+
+    外部URL
+    ----------------
+
+否则编译的时候会抛出错误。此时，点击引用标签，会跳转到后面的target标签。
+
 ``ref`` **角色**
+
+我们经常会在别人的文档里看到这种写法：:rst:`:ref:\`python\`` ，在解释性文本之前或者之后，有类似 ``:ref:`` 的标记，这个标记
+被称为解释性文本的角色（role），相当于指明用什么方式去解读反引号里面的文本。 ``:ref:`` 表示，后面的文本是一个引用。
+
+``python`` 后面加一个 ``_`` 表示这是一个引用，:rst:`:ref:\`python\`` 是在解释性文本之前加 ``:ref:``
+角色也表示是一个引用，这两者之前有什么区别呢？
+
+1. 两者渲染的内容不一样。
+
+    比如：现在在 ``外部URL`` 这个章节标题前定义一个target标签， :rst:`.. _outside url:` ，现在使用
+    :rst:`:ref:\`outside url\`` 进行引用，渲染结果为： :ref:`outside url` ，渲染的结果是章节标题。而
+    :rst:`\`outside url\`_` ，渲染的结果是 `outside url`_ 。
+
+2. 两者可以引用的范围不一样
+
+    后面加 ``_`` 的方式只能引用同一个文档内部的target标签，而 ``:ref:`` 角色不但可以引用文档内部标签，
+    还可以引用其它任意文档的标签。
+
+sphinx的 :ref:`tutorials/sphinx:sphinx.ext.autosectionlabel` 插件，可以自动为所有的章节添加显式的
+target标签。
 
 ``doc`` **角色**
 
@@ -557,6 +628,8 @@ sphinx官方文档说，默认角色不会对文本进行任何额外的处理�
 
 隐式target
 ~~~~~~~~~~~~~~~~~~~~~
+
+隐式target只能 :rst:`\`target\`_` 这种方式可以引用。 ``:ref:`` 角色的方式是不能引用的，必须加显式的target标签
 
 常用指令
 ----------------------
