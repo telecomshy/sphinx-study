@@ -11,7 +11,7 @@ sphinx是一个工具，一个python三方包，安装sphinx以后运行几条�
 
 reStructuredText是python官方推荐的编写文档的一种语法，和流行的markdown类似，功能更强大。sphinx最早基于reStructuredText，
 简单来说就是用reStructuredText语法编写 *.rst* 文件，然后利用sphinx生成静态网页。另外，sphinx对原生的reStructuredText语法进行
-了扩展，添加了很多角色, :ref:`指令 <tutorials/restructuredtext:指令(Directives)>`, 这点需要注意。
+了扩展，添加了很多角色, :ref:`指令 <tutorials/rst:指令(Directives)>`, 这点需要注意。
 
 这个教程是我学习sphinx和reStructuredText的笔记，主要分为两部分：
 
@@ -24,6 +24,6 @@ reStructuredText是python官方推荐的编写文档的一种语法，和流行�
    :maxdepth: 2
 
    tutorials/sphinx
-   tutorials/restructuredtext
+   tutorials/rst
    tutorials/questions
 

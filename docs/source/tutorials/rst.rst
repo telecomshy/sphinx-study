@@ -14,8 +14,9 @@ reStructuredText私房手册
 标记规范
 +++++++++++++++++++++++++
 
-reStructuredText语法乍一看有点复杂，但是细分下来，其实主要分为两大类，一类是文档元素，或者说块，所谓块，
-可以理解成一段内容，按照不同的语法书写的块有不同的解读方式。比如：
+刚学习reStructuredText的时候感觉rst的语法复杂又怪异，远不如markdown简单，简单看了几遍，总是记不住。
+
+等熟悉以后发现，其实细分下来，主要就两大类，一类是文档元素，或者说块，所谓块，可以理解成一段内容，按照不同的语法书写的块有不同的解读方式。比如：
 
 .. code-block:: rst
 
@@ -37,7 +38,7 @@ reStructuredText语法乍一看有点复杂，但是细分下来，其实主要�
 
 除此之外，还有一些语法规则，比如空格使用，转义等等，这些属于规则，没有实体。
 
-对reStructuredText的语法进行分类以后，再对照官方文档，学起来就会感觉轻松很多。
+对rst的语法进行分类以后，梳理清楚脉络，再对照官方文档，学起来就轻松多了。
 
 文档元素(Body Elements)
 -------------------------
@@ -200,7 +201,7 @@ This is a normal text paragraph again.
 显式标记块(Explicit Markup Blocks)
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-显式标记块是reStructuredText不太好理解的一个概念。简单来说，任何最前面是 ``..`` 开头的块都是显式标记块，表示整个块需要用特殊方式进行解读。
+显式标记块是rst不好理解的一个概念。简单来说，任何最前面是 ``..`` 开头的块都是显式标记块，表示整个块需要用特殊方式进行解读。
 
 脚注(Footnotes)
 ************************
@@ -293,13 +294,13 @@ This is a normal text paragraph again.
 
     |dog|
 
-    .. |dog| image:: dog.jpg
+    .. |dog| image:: ../imgs/dog.jpg
 
 渲染以后：
 
     |dog|
 
-    .. |dog| image:: dog.jpg
+    .. |dog| image:: ../imgs/dog.jpg
 
 可见，图片替换了 ``|dog|``，其中 ``image::`` 是一个指令，关于指令请查看 `相应章节 <指令(Directives)>`_ 。
 
@@ -336,6 +337,22 @@ sphinx内置了三个替换定义，分别是 ``|release|``, ``|version|``, ``|t
    :module: some.module.name
 
    Return a line of text input from the user.
+
+而最常用的指令 :rst:`.. code-block::` ，用来显示一段代码：
+
+.. code-block:: rst
+
+    .. code-block:: python
+
+        def add(x, y):
+            return x + y
+
+渲染出来是这个样子：
+
+.. code-block:: python
+
+    def add(x, y):
+        return x + y
 
 reStructuredText原生支持的指令很多，sphinx对原生的reStructuredText又进行了扩展，添加了不少指令。可以点击上面的链接进行查看。
 
@@ -425,7 +442,7 @@ reStructuredText的分隔线很简单，``--------`` 前后加空白行即可。
 
 内联标记的识别规则基本上符合直觉，也就是说一般情况下不会写错。但是有几点需要注意：
 
-1. 内联标记的起始 ````` 前，结束 ````` 后需要是空格或者特定的ASCII字符。方便起见，都用空格吧。
+1. 内联标记的起始符号前，结束符号后需要是空格或者特定的ASCII字符。方便起见，都用空格吧。
 2. 如果有字符要紧接着内联标记，需要使用 ``\`` 进行转义，比如：
 
     .. code-block:: rst
@@ -609,7 +626,7 @@ target标签。
     后面加 ``_`` 的方式只能引用同一个文档内部的target标签，而 ``:ref:`` 角色不但可以引用文档内部标签，
     还可以引用其它任意文档的标签。
 
-sphinx的 :ref:`tutorials/sphinx:sphinx.ext.autosectionlabel` 插件，可以自动为所有的章节添加显式的
+另外，sphinx的 :ref:`tutorials/sphinx:sphinx.ext.autosectionlabel` 插件，可以自动为所有的章节添加显式的
 target标签。
 
 ``doc`` **角色**
@@ -629,7 +646,13 @@ target标签。
 隐式target
 ~~~~~~~~~~~~~~~~~~~~~
 
-隐式target只能 :rst:`\`target\`_` 这种方式可以引用。 ``:ref:`` 角色的方式是不能引用的，必须加显式的target标签
+所有的章节标题，脚注，引用(citations)都是隐式的target标签，也就是说，不需要用 :rst:`.. _target:` 这样的语法标记
+就可以直接引用。但是注意：
+
+    1. 隐式target只能 :rst:`\`target\`_` 这种方式可以引用。 ``:ref:`` 角色的方式不能引用的，必须加显式的target标签。
+       也就是说，隐式target只能在文档内部被引用，不能直接引用其它文档的隐式target。
+    2. 相同的隐式target名称，以及相同的隐式和显式target的名称会产生冲突。冲突处理规则有点麻烦，也不需要特意的去记，如果
+       有冲突，会有提示。所以记住不要有相同的target名称就好了。
 
 常用指令
 ----------------------

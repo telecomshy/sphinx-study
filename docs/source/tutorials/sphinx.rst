@@ -9,19 +9,33 @@ sphinx私房手册
 4. 上传到 `RTD <https://readthedocs.org/dashboard/>`_ (或者上传到github，登陆RTD，关联github)
 5. 构建生成在线文档
 
-第一步就按照 `官方文档 <https://www.osgeo.cn/sphinx/index.html>`_ 一步一步操作就行，从
-`入门 <https://www.osgeo.cn/sphinx/usage/quickstart.html#>`_
-看到 `教程 <https://www.osgeo.cn/sphinx/tutorial/index.html>`_ 章节。主要的难点
-是生成文档框架以后，如何进行自定义修改。
+快速开始
+-------------------
+
+- `快速入门 <https://www.osgeo.cn/sphinx/tutorial/getting-started.html#setting-up-your-project-and-development-environment>`_
+
+通常情况下，我们创建一个项目以后，项目结构大致是这样的：
+
+.. image:: ../imgs/project-structure.png
+
+然后，进入项目根目录，运行：
+
+.. code-block:: console
+
+    sphinx-quickstart docs
+
+回答一堆问题以后，会自动生成各种文件，项目结构变成了这样：
+
+.. image:: ../imgs/project-structure.png
 
 官方文档中，直接开始介绍reStructuredText语法，中间缺少一个对生成文档结构的介绍，这会让人觉得有点懵，起码
 我当时在这里卡住了，学了一堆reStructuredText语法，感觉好像还是不知道从哪里下手。这就好像还不清楚房子的整
 体结构，直接就开始搬砖，因此，我们首先看看生成的文档结构是怎样的：
 
---------------------------------------------
-
 文档结构
 -------------------
+
+
 
 文档结构如下
 
@@ -61,7 +75,7 @@ default_role
 
     default_role = "any"
 
-:ref:`tutorials/restructuredtext:any` 是一个角色，它比较适合被设置成默认角色。
+:ref:`tutorials/rst:any` 是一个角色，它比较适合被设置成默认角色。
 
 --------------------------------------------
 
@@ -88,3 +102,5 @@ sphinx.ext.intersphinx
 
 sphinx.ext.autosectionlabel
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+该插件可以自动给章节标题，脚注等添加target标签
