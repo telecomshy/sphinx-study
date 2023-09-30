@@ -311,8 +311,9 @@ sphinx内置了三个替换定义，分别是 ``|release|``, ``|version|``, ``|t
 指令(Directives)
 ******************
 
-- `docutils指令文档 <https://docutils.sourceforge.io/docs/ref/rst/directives.html>`_
-- `sphinx指令文档 <https://www.sphinx-doc.org/en/master/usage/restructuredtext/directives.html>`_
+.. seealso::
+    - `docutils指令文档 <https://docutils.sourceforge.io/docs/ref/rst/directives.html>`_
+    - `sphinx指令文档 <https://www.sphinx-doc.org/en/master/usage/restructuredtext/directives.html>`_
 
 指令是reStructuredText最强大的功能之一，也是最不好理解和掌握的特性。指令可以理解成通用的显式标记块，也就是说，上面所有的显式标记块，
 什么注释啊，脚注啊，都是一种特殊的指令而已。
@@ -460,9 +461,10 @@ reStructuredText的分隔线很简单，``--------`` 前后加空白行即可。
 角色(Role)和域(Domain)
 ~~~~~~~~~~~~~~~~~~~~~~~~
 
-- `docutils角色文档 <https://docutils.sourceforge.io/docs/ref/rst/roles.html>`_
-- `sphinx角色文档 <https://www.sphinx-doc.org/en/master/usage/restructuredtext/roles.html>`_
-- `sphinx Domains <https://www.sphinx-doc.org/en/master/usage/restructuredtext/domains.html>`_
+.. seealso::
+    - `docutils角色文档 <https://docutils.sourceforge.io/docs/ref/rst/roles.html>`_
+    - `sphinx角色文档 <https://www.sphinx-doc.org/en/master/usage/restructuredtext/roles.html>`_
+    - `sphinx Domains <https://www.sphinx-doc.org/en/master/usage/restructuredtext/domains.html>`_
 
 上面提到了前后用反引号包括起来的文本叫可解释文本，所谓可解释文本，意思是需要用特定的方式去解读。那么，具体咋个解读呢？
 这就需要在前面或者后面添加一个角色标记。不同的角色，意味着不同的解读方式。比如：``:strong:`bold```，渲染出来就是 :strong:`bold` 。
@@ -662,7 +664,9 @@ target标签。
 toctree
 ~~~~~~~~~~~~~~~~~~~~
 
-- `官方文档 <https://www.sphinx-doc.org/en/master/usage/restructuredtext/directives.html#directive-toctree>`_
+.. seealso::
+
+    `官方文档 <https://www.sphinx-doc.org/en/master/usage/restructuredtext/directives.html#directive-toctree>`_
 
 toctree是一个sphinx的扩展指令，可以说它是sphinx最重要的一个指令。它的作用是把指令内容中列举的所有文档
 的章节标题抽取出来形成一个目录，并且这个目录会同时呈现在文档的主页面和侧边栏。
