@@ -70,19 +70,21 @@ sphinx使用方法
 rst文件基本结构
 ~~~~~~~~~~~~~~~~~
 
-最初生成的html如图：
+最初生成的html如图，如果严格按照上面的操作步骤的话，该文件为 ``docs/build/index.html`` ，和 ``docs/source/index.rst`` 对应：
 
-.. image:: ../imgs/project3.png
+.. image:: ../imgs/project6.png
 
-对应的rst文件如图：
+对应的 ``index.rst`` 文件内容如图：
 
 .. image:: ../imgs/project4.png
     :width: 400
 
-隐约可以看到两者之间的对应关系，最下面的 ``Indices and tables`` 部分暂时不管，这是sphinx自动生成的。
-主要看 ``toctree`` 这部分奇怪的内容。这其实是一个reStructuredText指令，所谓指令，暂时不懂没关系，后
-面进一步学习 :doc:`rst` 就明白了，暂时你只要知道，遇到这种两个 ``.`` 开头的标记，意味这接下来的内容需要
-进行特殊的解读：
+乍一看会有点懵，我们来一步一步拆解。首先，整个页面可以分为主内容和侧边栏，侧边栏目前不用管，它的内容是根据 :rst:`toctree` 指令
+自动生成的（ ``toctree`` 指令解释在后面）。
+
+再来看主内容部分，我们在 ``index.rst`` 文件中编写的内容和主内容部分是一一对应的。最下面的 ``Indices and tables`` 部分暂时
+也不用管，这部分也是sphinx自动生成的。主要看 ``toctree`` 这部分奇怪的内容。这其实是一个reStructuredText指令，所谓指令，暂时
+不懂没关系，后面进一步学习 :doc:`rst` 就明白了，现在你只要知道，遇到这种两个 ``.`` 开头的标记，意味这接下来的内容需要进行特殊的解读：
 
 .. code-block:: rst
 
@@ -145,17 +147,191 @@ demo2.rst文件内容如下::
 index.rst是一个入口文件，它应该是整个项目各部分内容的介绍，每一部分是一个或多个rst文件。通过toctree
 形成目录把所有文件关联起来。
 
+到这里基本上对sphinx的基本使用方法，整体结构已经了解的差不多了，接下来就是编写rst文件，编译成html文件，不断
+重复这个过程。不过，如果是为软件包编写文档，那么还剩下一部分内容需要了解。就是如何自动抽取代码中的docstring，
+形成API文档。
+
 自动生成API文档
 ~~~~~~~~~~~~~~~~~~
 
-到这里基本上对sphix的基本使用方法，整体结构已经了解的差不多了，还剩下最后一部分内容。就是如何自动抽取代码
-中的docstring，形成API文档。
+一个完整的文档，一般包含教程和软件包API文档两大块内容，其中api的部分，sphinx提供了便捷的方法，只需要通过简单的指令，
+就能自动抽取代码中的docstrings，形成完成的API文档。
 
+首先，我们在写代码的时候，不光要写注释，要按照规范的格式编写docstrings。 所谓docstrings，也是注释
+的一种，不过普通的注释是给程序员自己看的，而docstrings是给使用包的其它人看的。
 
+关于docstrings，我们这里不详细展开。需要了解的是，sphinx支持用三种不同的风格书写docstrings，
+分别是reStructuredText, google和numpy风格。
 
+比如：当我们写一个函数的docstring，原生的reStructuredText是这样：
+
+.. code-block:: python
+
+    def function_with_types_in_docstring(param1, param2)::
+        """Example function with types documented in the docstring.
+
+        :pep:`484` type annotations are supported. If attribute, parameter, and
+        return types are annotated according to `PEP 484`_, they do not need to be
+        included in the docstring:
+
+        :param param1: The first parameter
+        :type param1: int
+        :param param2: The second parameter
+        :type param2: str
+        :returns: The return value. True for success, False otherwise.
+        :rtype: bool
+        """
+
+如果是google风格，则应该写成这样：
+
+.. code-block:: python
+
+    def function_with_types_in_docstring(param1, param2):
+        """Example function with types documented in the docstring.
+
+        :pep:`484` type annotations are supported. If attribute, parameter, and
+        return types are annotated according to `PEP 484`_, they do not need to be
+        included in the docstring:
+
+        Args:
+            param1 (int): The first parameter.
+            param2 (str): The second parameter.
+
+        Returns:
+            bool: The return value. True for success, False otherwise.
+        """
+
+numpy风格呢，则是下面这样：
+
+.. code-block:: python
+
+    def function_with_types_in_docstring(param1, param2):
+        """Example function with types documented in the docstring.
+
+        :pep:`484` type annotations are supported. If attribute, parameter, and
+        return types are annotated according to `PEP 484`_, they do not need to be
+        included in the docstring:
+
+        Parameters
+        ----------
+        param1 : int
+            The first parameter.
+        param2 : str
+            The second parameter.
+
+        Returns
+        -------
+        bool
+            True if successful, False otherwise.
+        """
+
+.. attention::
+
+    这三种风格，只是参数，返回值等一些细节方面有所不同，其它的内容仍然遵循reStructuredText语法。
+
+可见，原生的reStructuredText写法比较麻烦，可读性也不如google或者numpy的风格，所以推荐使用后两种。其中，google风格横向比较长，
+相对紧凑一点，pydantic使用的就是google风格，而numpy纵向比较长，比较适合长篇幅的内容，pandas使用的就是numpy风格。具体选用哪一
+种，完全取决于个人审美。
+
+这两种风格的具体写法，参考官方文档：
+
+.. seealso::
+
+    - `google风格的例子 <https://www.sphinx-doc.org/en/master/usage/extensions/example_google.html>`_
+    - `numpy风格的例子 <https://www.sphinx-doc.org/en/master/usage/extensions/example_numpy.html#example-numpy>`_
+
+如果使用pycharm，可以在设置->工具->python集成工具->docstrings中，选择自动生成相应的风格。
+
+了解了关于docstrings的基本概念，接下来要做的，就是使用sphinx提供的工具，自动抽取docstrings，形成API文档。这一步非常简单，但是
+在此之前，我们还需要先了解 ``autodoc`` 插件。
+
+正常情况下，我们如果在rst文件中，手写一个函数的说明文档，需要这样写：
+
+.. code-block:: rst
+
+    .. py:function:: send_message(sender, recipient, message_body, [priority=1])
+
+       Send a message to a recipient
+
+       :param str sender: The person sending the message
+       :param str recipient: The recipient of the message
+       :param str message_body: The body of the message
+       :param priority: The priority of the message, can be a number 1-5
+       :type priority: integer or None
+       :return: the message id
+       :rtype: int
+       :raises ValueError: if the message_body exceeds 160 characters
+       :raises TypeError: if the message_body is not a basestring
+
+但是我们在写代码的时候，已经编写了这个函数的docstrings，在写rst文件的时候，就不用再重复写函数的说明文档了。修改conf.py
+的extensions部分如下：
+
+.. code-block:: python
+
+    extensions = [
+        'sphinx.ext.autodoc',
+    ]
+
+然后，在rst文件中，把 :rst:`.. py:function::` 部分改为(假设 ``send_message`` 是模块 ``demo`` 的顶层函数)：
+
+.. code-block:: rst
+
+    .. autofunction:: send_message
+
+编译的时候，就会自动抽取 ``send_message`` 函数中的docstrings，效果和使用 :rst:`.. py:function::` 指令手写是一样的。
+
+除了 ``autofunction`` ，autodoc还提供了 ``autoclass`` , ``automodule`` 等指令，用来抽取类，模块等的docstrings。
+
+其实到了这一步，我们已经可以通过autodoc来手动编写api文档，但是sphinx提供了一个工具，帮助大家自动完成这一步。只需要在命令行运行：
+
+.. code-block:: console
+
+    sphinx-apidoc [OPTIONS] -o <OUTPUT_PATH> <MODULE_PATH> [EXCLUDE_PATTERN …]
+
+比如，还是之前的demo项目，退回到项目根目录，运行：
+
+.. code-block:: console
+
+    sphinx-apidoc -o docs/source/api pkg
+
+此时在 ``/docs/source/api`` 目录下，生成了一个modules.rst文件和pkg.rst文件：
+
+.. image:: ../imgs/project7.png
+    :width: 400
+
+其中modules.rst仅包含一个 ``toctree`` 指令，如果前面的内容还记得的话，就知道它是抽取其它文件的章节标题形成目录。而pkg.rst
+则是利用autodoc抽取代码中docstrings，形成api文档。
+
+然后修改index.rst的 ``toctree`` 指令，添加modules文件:
+
+.. code-block:: rst
+
+    .. toctree::
+       :maxdepth: 2
+       :caption: Contents:
+
+       demo1
+       demo2
+       api/modules
+
+.. attention::
+
+    如果pkg目录下没有__init__文件，则sphinx-apidoc需要加--implicit-namespaces选项
+
+然后 ``make html`` 重新编译。index页面现在变成：
+
+.. image:: ../imgs/project8.png
+
+点击pkg，该页面对应modules.rst文件，生成的html页面如下：
+
+.. image:: ../imgs/project9.png
+
+点击pkg package，该页面对应pkg.rst文件，生成的html页面如下：
+
+.. image:: ../imgs/project10.png
 
 到这里，相信已经对如何使用sphinx有了一个全面的了解。接下来就是熟悉sphinx的常用配置和插件，以及深入学习
-:doc:`reStructuredText<rst>` 语法。
+:doc:`reStructuredText<rst>` 语法啦。
 
 --------------------------------------------
 
@@ -206,15 +382,11 @@ sphinx.ext.napoleon
 .. seealso::
 
     - `sphinx.ext.napoleon <https://www.sphinx-doc.org/en/master/usage/extensions/napoleon.html>`_
-    - `google风格的例子 <https://www.sphinx-doc.org/en/master/usage/extensions/example_google.html>`_
-    - `numpy风格的例子 <https://www.sphinx-doc.org/en/master/usage/extensions/example_numpy.html#example-numpy>`_
 
 reStructuredText写docstrings看起来有点混乱，除了直接用reStructuredText写docstrings，常见的还有google风格和numpy风格。
 这两种风格比较起来更简洁和清爽。比如，著名的pandas使用的就是numpy风格的docstrings。
 
 napoleon是一个预处理器，它可以把google或者numpy风格的docstrings转换成reStructuredText,
-
-如果使用pycharm，可以在设置->工具->python集成工具->docstrings中，选择自动生成相应的风格。
 
 sphinx.ext.intersphinx
 ~~~~~~~~~~~~~~~~~~~~~~~~~~
