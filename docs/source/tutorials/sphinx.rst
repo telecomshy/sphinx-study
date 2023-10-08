@@ -331,12 +331,13 @@ numpy风格呢，则是下面这样：
 .. image:: ../imgs/project10.png
 
 接下来做什么
-===================
+~~~~~~~~~~~~
 
-到这里，相信已经对如何使用sphinx有了一个全面基本的了解，可以开始动手了。接下来推荐学习 :ref:`tutorials/rst:reStructuredText私房手册`
+到这里，相信已经对如何使用sphinx有了一个全面基本的了解。接下来推荐学习 :ref:`tutorials/rst:reStructuredText私房手册`
 的内容，了解reStructuredText的基本语法，特别是 :ref:`tutorials/rst:交叉引用` 部分。再就是熟悉sphinx的各种常用配置和插件。
 
-另外，生成的html文档，如何在 `RTD <https://about.readthedocs.com/>`_ 上部署，也需要了解，不过这部分非常简单，这里就不展开啦。
+另外，生成的html文档，如何在 `readthedocs <https://about.readthedocs.com/>`_ 上部署，也需要了解，不过这部分非常简单，
+自己百度一下就好啦。
 
 --------------------------------------------
 
